@@ -18,7 +18,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.markdown("<h1 class='main-title'>🎓 Demi AI</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-title'>🤪 Demi AI</h1>", unsafe_allow_html=True)
 st.divider()
 
 # 3. Logika Chat
@@ -37,7 +37,7 @@ if prompt := st.chat_input("Tanyakan materi pelajaran..."):
 
     with st.chat_message("assistant"):
         try:
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("models/gemini-1.5-flash")
             # Instruksi agar AI menjadi teman belajar yang ramah
             full_prompt = f"Kamu adalah Demi AI, asisten belajar yang ramah untuk siswa. Jawablah pertanyaan ini: {prompt}"
             response = model.generate_content(full_prompt)
