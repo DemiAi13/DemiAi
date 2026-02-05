@@ -14,7 +14,7 @@ def get_working_model():
             return m.name
     return "gemini-1.5-flash" # fallback
 
-st.title("🎓 Demi AI")
+st.title("♥️ Adel Ai")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
