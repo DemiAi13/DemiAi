@@ -2,7 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 
 # 1. Konfigurasi
-st.set_page_config(page_title="Demi AI", page_icon="🎓")
+st.set_page_config(page_title="Adel AI", page_icon="♥️")
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 # 2. Fungsi untuk mencari model yang aktif otomatis
