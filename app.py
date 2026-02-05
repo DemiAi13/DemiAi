@@ -2,23 +2,16 @@ import streamlit as st
 import google.generativeai as genai
 
 # 1. Konfigurasi Halaman
-st.set_page_config(page_title="Demi AI - Teman Belajar", page_icon="🎓")
+st.set_page_config(page_title="Demi AI", page_icon="🎓")
 
-# Menghubungkan ke API Key dari Secrets Streamlit
+# Menghubungkan ke API
 try:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 except:
-    st.error("API Key belum terpasang di Secrets!")
+    st.error("API Key belum terpasang!")
 
-# 2. Desain Tampilan (CSS)
-st.markdown("""
-    <style>
-    .stApp { background-color: #0F172A; color: white; }
-    .main-title { text-align: center; color: #38BDF8; font-family: 'Helvetica'; }
-    </style>
-    """, unsafe_allow_html=True)
-
-st.markdown("<h1 class='main-title'>🤪 Demi AI</h1>", unsafe_allow_html=True)
+# 2. Desain Sederhana
+st.markdown("<h1 style='text-align: center; color: #38BDF8;'>🎓 Demi AI</h1>", unsafe_allow_html=True)
 st.divider()
 
 # 3. Logika Chat
@@ -29,7 +22,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 4. Proses Jawaban AI
+# 4. Proses Jawaban
 if prompt := st.chat_input("Tanyakan materi pelajaran..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -37,12 +30,19 @@ if prompt := st.chat_input("Tanyakan materi pelajaran..."):
 
     with st.chat_message("assistant"):
         try:
-            model = genai.GenerativeModel("gemini-pro")
-            # Instruksi agar AI menjadi teman belajar yang ramah
-            full_prompt = f"Kamu adalah Demi AI, asisten belajar yang ramah untuk siswa. Jawablah pertanyaan ini: {prompt}"
-            response = model.generate_content(full_prompt)
-            answer = response.text
-            st.markdown(answer)
-            st.session_state.messages.append({"role": "assistant", "content": answer})
+            # JURUS PAMUNGKAS: Mencari model yang tersedia otomatis
+            model_name = 'gemini-1.5-flash' # Coba ini dulu
+            model = genai.GenerativeModel(model_name)
+            
+            response = model.generate_content(prompt)
+            st.markdown(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
         except Exception as e:
-            st.error(f"Ada kendala: {e}")
+            # Jika gagal, coba model alternatif 'gemini-pro'
+            try:
+                model = genai.GenerativeModel('gemini-pro')
+                response = model.generate_content(prompt)
+                st.markdown(response.text)
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
+            except:
+                st.error("Waduh, koneksi ke otak AI terputus. Coba klik 'Reboot' di menu Settings Streamlit ya!")
